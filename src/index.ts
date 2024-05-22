@@ -8,7 +8,6 @@ const server = http.createServer((req, res) => {
     
     if(url === '/calculate' && method === "POST") {
         const reqBody: any[] = [];
-        const va: number = 0;
         req.on('data', (d) => {
             console.log(`Gaunami duomenys ${d}`);
             console.log(`Duomenys ${d}`);
@@ -36,7 +35,7 @@ const server = http.createServer((req, res) => {
 
     if(url == '/') {
         res.setHeader('Content-Type', 'text/html');
-        const template = fs.readFileSync('templates/index.html');
+        const template = fs.readFileSync('index.html');
         res.write(template)
 
         return res.end();
