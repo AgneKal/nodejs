@@ -35,7 +35,7 @@ const server = http.createServer((req, res) => {
 
     if(url == '/') {
         res.setHeader('Content-Type', 'text/html');
-        const template = fs.readFileSync('index.html');
+        const template = fs.readFileSync('templates/index.html');
         res.write(template)
 
         return res.end();
