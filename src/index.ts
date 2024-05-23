@@ -1,10 +1,37 @@
 import http from 'http';
 import fs from 'fs';
+import path from 'path';
 
 const server = http.createServer((req, res) => {
     const method = req.method;
     const url = req.url;
     console.log(`Metodas: ${method}, Url: ${url}`);
+
+    let filePath = `public${url}`;
+
+        
+    if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
+        const ext = path.extname(filePath);
+        switch(ext) {
+            case ".css":
+                 res.setHeader('Content-Type', 'text/css');
+                 break;
+            case ".jpg":
+            case ".jpeg":
+            case ".png":
+                 res.setHeader('Content-Type', 'image/jpg');
+                 break;
+            case ".js":
+                res.setHeader('Content-Type', 'applications/javascript');
+                break;
+        }
+        
+        let file = fs.readFileSync(filePath);
+
+        res.write(file);
+        // res.write("body {background-color: red}");
+        return res.end();
+    }
     
     if(url === '/calculate' && method === "POST") {
         const reqBody: any[] = [];

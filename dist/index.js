@@ -5,13 +5,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
 const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const server = http_1.default.createServer((req, res) => {
     const method = req.method;
     const url = req.url;
     console.log(`Metodas: ${method}, Url: ${url}`);
+    let filePath = `public${url}`;
+    if (fs_1.default.existsSync(filePath) && fs_1.default.lstatSync(filePath).isFile()) {
+        const ext = path_1.default.extname(filePath);
+        switch (ext) {
+            case ".css":
+                res.setHeader('Content-Type', 'text/css');
+                break;
+            case ".jpg":
+            case ".jpeg":
+            case ".png":
+                res.setHeader('Content-Type', 'image/jpg');
+                break;
+            case ".js":
+                res.setHeader('Content-Type', 'applications/javascript');
+                break;
+        }
+        let file = fs_1.default.readFileSync(filePath);
+        res.write(file);
+        // res.write("body {background-color: red}");
+        return res.end();
+    }
     if (url === '/calculate' && method === "POST") {
         const reqBody = [];
-        const va = 0;
         req.on('data', (d) => {
             console.log(`Gaunami duomenys ${d}`);
             console.log(`Duomenys ${d}`);
